@@ -1,0 +1,7 @@
+numpy
+matplotlib
+moviepy
+opencv-python
+mediapipe
+tqdm
+pandas
