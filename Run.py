@@ -1,6 +1,5 @@
-from VideoProcessor import VideoProcessor as vp
+from run_utils import *
 from PoseEstimator import PoseEstimator as pose
-from Calculator import Calculator as calc
 from Visualizer import Visualizer as viz
 
 class Run:
@@ -9,7 +8,7 @@ class Run:
         self.athlete = athlete
         
         # Use VideoProcessor to create Video object that contains path to mp4, fps, resolution fields
-        self.video = vp.get_video_from_path(video_path)
+        self.video = get_video_from_path(video_path)
         print(f'Created Video object: {str(self.video)}')
         input('Press enter to continue...')
 
@@ -23,7 +22,7 @@ class Run:
         self.end_10m_coords = (int(input('End pixel value of 10m: ')), 0)
 
         # Calculate the velocity data using Calculator
-        self.velocity_data = calc.calculate_x_velocity(self.pose_data, self.start_10m_coords, self.end_10m_coords, self.video.get_fps(), export_csv=True)
+        self.velocity_data = calculate_x_velocity(self.pose_data, self.start_10m_coords, self.end_10m_coords, self.video.get_fps(), export_csv=True)
         print('Velocity calculated successfully.')
         input('Press enter to continue...')
 
