@@ -1,18 +1,12 @@
 import numpy as np
 import pandas as pd
 
-class Calculator:
-    
-    @staticmethod
-    def append_average(data: np.ndarray):
-        com = np.reshape(np.average(data, axis=1), (data.shape[0], 1, data.shape[1])) #average over the points dimension, shape (num_frames, 1, 2)
-        return np.append(data, com, axis=1)
-    
+class Calculator:   
 
     # Return instantaneous x velocity at each frame as a (P, F) numpy array
     @staticmethod
     def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int], end_10m_coords: tuple[int, int], fps: float, export_csv: bool):
-        pose_data_with_com = Calculator.append_average(pose_data)
+        pose_data_with_com = np.append(pose_data, np.reshape(np.average(pose_data, axis=1), (pose_data.shape[0], 1, pose_data.shape[1])), axis=1)
 
         #Extract x-coordinates of landmarks from data. Shape (num_frames, num_landmarks)
         x_coords = pose_data_with_com[:, :, 0]
