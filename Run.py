@@ -4,8 +4,9 @@ from Visualizer import Visualizer as viz
 
 class Run:
 
-    def __init__(self, video_path: str, athlete: str):
-        self.athlete = athlete
+    def __init__(self, id: str, video_path: str, athlete_id: str):
+        self.id = id
+        self.athlete_id = athlete_id
         
         # Use VideoProcessor to create Video object that contains path to mp4, fps, resolution fields
         self.video = get_video_from_path(video_path)
@@ -41,3 +42,7 @@ class Run:
     
     def get_velocity_data(self):
         return self.velocity_data
+    
+    def __str__(self):
+        result = f'Run ID: {self.id}, Athlete ID: {self.athlete_id}'
+        return result

@@ -11,3 +11,5 @@ $ .venv/Scripts/Activate.ps1
 Once the environment is activated, install all the needed dependencies:
 
 $ pip install -r requirements.txt
+
+Once the dependencies are installed, create a folder called 'input' - this is where you should put your videos that you plan to use.
