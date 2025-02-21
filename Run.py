@@ -42,3 +42,7 @@ class Run:
     
     def get_velocity_data(self):
         return self.velocity_data
+    
+    def __str__(self):
+        result = f'Run ID: {self.id}, Athlete ID: {self.athlete_id}'
+        return result
