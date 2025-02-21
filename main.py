@@ -1,8 +1,12 @@
-from Run import Run
+from Organization import Organization
+from control_utils import *
 
-filename = input('Video filename: ')
-path = f'./input/{filename}'
+org = Organization('vip', 'GT Track VIP')
 
-athlete_name = input('Athlete name: ')
+command = command_input()
 
-testrun = Run(path, athlete_name)
+while command != 'quit':
+    command_result = process_command(org, command)
+    print(command_result)
+    
+    command = command_input()
