@@ -14,7 +14,7 @@ class Run:
         input('Press enter to continue...')
 
         # Use PoseEstimator to get pose estimation points from video in a np array
-        self.pose_data = pose.get_pose_data_from_video(self.video, export_video=True, export_csv=True)
+        self.pose_data = pose.get_pose_data_from_video(self.video, export_video=True)
         print('Pose detection applied successfully.')
         input('Press enter to continue...')
 
@@ -23,7 +23,7 @@ class Run:
         self.end_10m_coords = (int(input('End pixel value of 10m: ')), 0)
 
         # Calculate the velocity data using Calculator
-        self.velocity_data = calculate_x_velocity(self.pose_data, self.start_10m_coords, self.end_10m_coords, self.video.get_fps(), export_csv=True)
+        self.velocity_data = calculate_x_velocity(self.pose_data, self.start_10m_coords, self.end_10m_coords, self.video.get_fps())
         print('Velocity calculated successfully.')
         input('Press enter to continue...')
 

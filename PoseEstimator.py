@@ -4,13 +4,14 @@ import cv2
 import mediapipe as mp
 from tqdm import tqdm
 import pandas as pd
+import os
 
 #Static class to apply pose estimation model to video
 class PoseEstimator:
 
     # Return pose data as a numpy array of shape (P, 2, F) where P is the # of points and F is the number of frames
     @staticmethod
-    def get_pose_data_from_video(video: Video, export_video: bool, export_csv: bool):
+    def get_pose_data_from_video(video: Video, export_video: bool):
         path = video.get_path()
 
         # Initialize pose estimator
@@ -26,6 +27,7 @@ class PoseEstimator:
 
         # Set output configuration
         if export_video:
+            os.makedirs('./output/videos', exist_ok=True)
             output_path = './output/videos/out.mp4'
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 'mp4v' for .mp4 files
             out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
@@ -86,9 +88,6 @@ class PoseEstimator:
         cv2.destroyAllWindows()
 
         pose_data = np.array(pose_data) # Numpy array of size (num_frames, num_landmarks, num_dimensions). num_dimensions is 2 (x, y)
-
-        if export_csv:
-            PoseEstimator.export_pose_data_to_csv(pose_data)
 
         return pose_data
     

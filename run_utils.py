@@ -38,7 +38,7 @@ def convert_to_mp4(path: str) -> str:
         raise FileNotFoundError(f'{path} not found.')
 
 
-def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int], end_10m_coords: tuple[int, int], fps: float, export_csv: bool):
+def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int], end_10m_coords: tuple[int, int], fps: float):
     pose_data_with_com = np.append(pose_data, np.reshape(np.average(pose_data, axis=1), (pose_data.shape[0], 1, pose_data.shape[1])), axis=1)
 
     #Extract x-coordinates of landmarks from data. Shape (num_frames, num_landmarks)
@@ -53,17 +53,6 @@ def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int
     result = result_in_pixels_per_frame * meters_per_pixel * frames_per_second
 
     result = smooth(result, 5)
-
-    if export_csv:
-        export_path = './output/csv/velocity.csv'
-        num_frames = result.shape[0]
-
-        # Create DataFrame with Time and Velocity Columns
-        df = pd.DataFrame(result, columns=[f"Point {i+1}" for i in range(result.shape[1])])
-        df.insert(0, "Frame #", np.arange(num_frames))  # Add time column
-
-        # Save to CSV
-        df.to_csv(export_path, index=False)
 
     return result
 
