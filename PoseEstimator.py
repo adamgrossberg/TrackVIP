@@ -27,8 +27,8 @@ class PoseEstimator:
 
         # Set output configuration
         if export_video:
-            os.makedirs('./output/videos', exist_ok=True)
-            output_path = './output/videos/out.mp4'
+            os.makedirs('./output', exist_ok=True)
+            output_path = './output/out.mp4'
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 'mp4v' for .mp4 files
             out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
