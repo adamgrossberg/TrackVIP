@@ -8,5 +8,5 @@ command = command_input()
 while command != 'quit':
     command_result = process_command(org, command)
     print(command_result)
-    
+
     command = command_input()
