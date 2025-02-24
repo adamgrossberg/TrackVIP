@@ -3,7 +3,7 @@ from Organization import Organization
 def command_input():
     command = input('Enter a command: ')
 
-    while command.lower() not in ['quit', 'save', 'status', 'add user', 'add athlete', 'add run']:
+    while command.lower() not in ['quit', 'save', 'load', 'status', 'add user', 'add athlete', 'add run']:
         command = input('Invalid command. Enter a command: ')
     
     return command
@@ -17,9 +17,16 @@ def process_command(organization: Organization, command: str):
         case 'save':
             path = f'.\\save_data\\{organization.id}'
             
-            organization.save_organization_to_csv()
+            organization.save_to_csv()
 
             return f'Organization data saved to {path}'
+
+        case 'load':
+            id = input('Organization ID: ')
+
+            organization.load_from_csv(id)
+
+            return f'Organization {organization.name} ({organization.id}) loaded successfully.'
 
         case 'add user':
             id = input('User ID: ')
@@ -44,11 +51,11 @@ def process_command(organization: Organization, command: str):
         
         case 'add run':
             id = input('Run ID: ')
+            athlete_id = input('Athlete ID: ')
             video_path = input('Video file name: ')
             video_path = './input/' + video_path
-            athlete_id = input('Athlete ID: ')
 
-            organization.add_run(id, video_path, athlete_id)
+            organization.add_run(id, athlete_id, video_path)
 
             return f'Run {id} added successfully.'
         

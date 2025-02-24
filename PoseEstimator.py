@@ -9,7 +9,7 @@ import os
 #Static class to apply pose estimation model to video
 class PoseEstimator:
 
-    # Return pose data as a numpy array of shape (P, 2, F) where P is the # of points and F is the number of frames
+    # Return pose data as a numpy array of shape (F, P, 2) where P is the # of points and F is the number of frames
     @staticmethod
     def get_pose_data_from_video(video: Video, export_video: bool):
         path = video.get_path()
