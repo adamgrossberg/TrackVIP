@@ -22,6 +22,27 @@ class Organization:
     def add_user(self, id: str, name: str, can_view: bool, can_add: bool):
         self.users[id] = User(id, name, can_view, can_add)
 
+    def edit_athlete(self, id: str, first_name: str, last_name: str):
+        self.athletes[id].first_name = first_name
+        self.athletes[id].last_name = last_name
+
+    def edit_run(self, id: str, athlete_id: str, video_path: str):
+        self.runs[id].athlete_id = athlete_id
+    
+    def edit_user(self, id: str, name: str, can_view: bool, can_add: bool):
+        self.users[id].name = name
+        self.users[id].can_view = can_view
+        self.users[id].can_add = can_view
+
+    def delete_athlete(self, id: str):
+        self.athletes.pop(id)
+    
+    def delete_run(self, id: str):
+        self.runs.pop(id)
+    
+    def delete_user(self, id: str):
+        self.users.pop(id)
+
     def save_to_csv(self):
         export_path = f'./save_data/{self.id}/'
         os.makedirs(export_path + 'pose_data', exist_ok=True)
@@ -102,6 +123,8 @@ class Organization:
         self.name = org_info
         #Load Users from csv
         user_data = np.loadtxt(input_path + 'users.csv', dtype=str, delimiter=',', skiprows=1)
+        if isinstance(user_data[0], str):
+            user_data = [user_data]
         for user in user_data:
             user_id = user[0]
             user_name = user[1]
@@ -110,6 +133,8 @@ class Organization:
             self.users[user_id] = User(user_id, user_name, can_view, can_add)
         #Load Athletes from csv
         athlete_data = np.loadtxt(input_path + 'athletes.csv', dtype=str, delimiter=',', skiprows=1)
+        if isinstance(athlete_data[0], str):
+            athlete_data = [athlete_data]
         for athlete in athlete_data:
             athlete_id = athlete[0]
             first_name = athlete[1]
@@ -136,7 +161,6 @@ class Organization:
 
             self.runs[run_id] = Run(run_id, athlete_id, video_path, video_fps, (video_resolution_x, video_resolution_y), pose_data, 
                                     (start_10m_coords_x, start_10m_coords_y), (end_10m_coords_x, end_10m_coords_y))
-
 
     def __str__(self):
         result = f'Organization: {self.name} ({self.id}) \n'

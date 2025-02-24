@@ -8,7 +8,13 @@ VALID_COMMANDS = {
     'status': 'see the current organization configuration',
     'add user': 'add a user to your organization',
     'add athlete': 'add an athlete to your organization',
-    'add run': 'add a run to your organization'
+    'add run': 'add a run to your organization',
+    'edit user': 'edit a user in your organization',
+    'edit athlete': 'edit an athlete in your organization',
+    'edit run': 'edit a run in your organization',
+    'delete user': 'remove a user from your organization',
+    'delete athlete': 'remove an athlete from your organization',
+    'delete run': 'remove a run from your organization'
     }
 
 def select_organization():
@@ -84,5 +90,55 @@ def process_command(organization: Organization, command: str):
 
             return f'Run {id} added successfully.'
         
+        case 'edit user':
+            id = input('User ID: ')
+            name = input('User name: ')
+            can_view = input('Can view (y/n): ').lower()
+            can_add = input('Can add (y/n): ').lower()
+            can_view = can_view == 'y'
+            can_add = can_add == 'y'
+
+            organization.edit_user(id, name, can_view, can_add)
+            
+            return f'User with ID {id} edited successfully.'
+        
+        case 'edit athlete':
+            id = input('Athlete ID: ')
+            first_name = input('First name: ')
+            last_name = input('Last name: ')
+
+            organization.edit_athlete(id, first_name, last_name)
+        
+            return f'Athlete {first_name} {last_name} ({id}) edited auccessfully.'
+        
+        case 'edit run':
+            id = input('Run ID: ')
+            athlete_id = input('Athlete ID: ')
+
+            organization.edit_run(id, athlete_id)
+
+            return f'Run {id} edited successfully.'
+        
+        case 'delete user':
+            id = input('User ID: ')
+
+            organization.delete_user(id)
+
+            return f'Succefully deleted user {id}.'
+        
+        case 'delete athlete':
+            id = input('Athlete ID: ')
+
+            organization.delete_athlete(id)
+
+            return f'Succefully deleted athlete {id}.'
+        
+        case 'delete run':
+            id = input('Run ID: ')
+
+            organization.delete_run(id)
+
+            return f'Succefully deleted run {id}.'
+
         case _:
             return ''
