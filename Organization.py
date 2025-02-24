@@ -142,11 +142,11 @@ class Organization:
         result = f'Organization: {self.name} ({self.id}) \n'
         result += f'Users: \n'
         for user in self.users.values():
-            result += f'{str(user)}\n'
+            result += f'\t{str(user)}\n'
         result += f'Runs: \n'
         for run in self.runs.values():
-            result += f'{str(run)}\n'
+            result += f'\t{str(run)}\n'
         result += 'Athletes: \n'
         for athlete in self.athletes.values():
-            result += f'{str(athlete)}\n'
+            result += f'\t{str(athlete)}\n'
         return result

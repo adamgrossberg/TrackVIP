@@ -1,16 +1,48 @@
 from Organization import Organization
+import os
+
+VALID_COMMANDS = {
+    'list': 'list valid commands',
+    'quit': 'close the system', 
+    'save': 'save current organization configuration',
+    'status': 'see the current organization configuration',
+    'add user': 'add a user to your organization',
+    'add athlete': 'add an athlete to your organization',
+    'add run': 'add a run to your organization'
+    }
+
+def select_organization():
+    while True:
+        org_id = input('Organization ID: ')
+        if os.path.exists(f'./save_data/{org_id}'):
+            org = Organization('', '')
+            org.load_from_csv(org_id)
+            break
+        else:
+            retry_prompt = input('No existing organization with that ID. Do you want to create a new organization? (y/n) ')
+            if retry_prompt.lower() == 'y':
+                org_name = input("New organization name: ")
+                org = Organization(org_id, org_name)
+    print(f'{org.name} ({org.id}) loaded.')
+    return org
 
 def command_input():
     command = input('Enter a command: ')
 
-    while command.lower() not in ['quit', 'save', 'load', 'status', 'add user', 'add athlete', 'add run']:
-        command = input('Invalid command. Enter a command: ')
+    while command.lower() not in VALID_COMMANDS.keys():
+        command = input('Invalid command. Enter a command (Type \'list\' to see valid commands): ')
     
     return command
 
 def process_command(organization: Organization, command: str):
     
     match command:
+        case 'list':
+            result = ''
+            for name, description in VALID_COMMANDS.items():
+                result += f'{name}: {description}\n'
+            return result
+
         case 'status':
             return str(organization)
         
@@ -20,13 +52,6 @@ def process_command(organization: Organization, command: str):
             organization.save_to_csv()
 
             return f'Organization data saved to {path}'
-
-        case 'load':
-            id = input('Organization ID: ')
-
-            organization.load_from_csv(id)
-
-            return f'Organization {organization.name} ({organization.id}) loaded successfully.'
 
         case 'add user':
             id = input('User ID: ')

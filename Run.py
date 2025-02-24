@@ -52,5 +52,5 @@ class Run:
         return self.velocity_data
     
     def __str__(self):
-        result = f'Run ID: {self.id}, Athlete ID: {self.athlete_id}'
+        result = f'{self.id + ':':<20}{self.athlete_id:<20}'
         return result

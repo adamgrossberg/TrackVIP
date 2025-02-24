@@ -6,4 +6,4 @@ class User:
         self.can_add = can_add
     
     def __str__(self):
-        return f'{self.name} ({self.id})'
+        return f'{self.id + ':':<20}{self.name:<20}'
