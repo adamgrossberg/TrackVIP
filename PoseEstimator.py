@@ -40,7 +40,7 @@ class PoseEstimator:
 
         # Initialize tqdm progress bar
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        progress_bar = tqdm(total=total_frames, desc="Processing Frames", unit="frame")
+        progress_bar = tqdm(total=total_frames, desc="Applying Pose Estimation", unit="frame")
 
         while cap.isOpened():
             # read frame
@@ -90,25 +90,3 @@ class PoseEstimator:
         pose_data = np.array(pose_data) # Numpy array of size (num_frames, num_landmarks, num_dimensions). num_dimensions is 2 (x, y)
 
         return pose_data
-    
-
-    @staticmethod
-    def export_pose_data_to_csv(data: np.ndarray):
-        save_path = './output/csv/position.csv'
-        num_frames, num_points, _ = data.shape
-
-        # Reshape position array to (num_frames, num_points * 2) -> Flatten x, y for each point
-        reshaped_positions = data.reshape(num_frames, num_points * 2)
-
-        # Create column names: "Point 1 X", "Point 1 Y", "Point 2 X", "Point 2 Y", etc.
-        column_names = []
-        for i in range(num_points):
-            column_names.append(f"Point {i+1} X")
-            column_names.append(f"Point {i+1} Y")
-
-        # Create DataFrame
-        df = pd.DataFrame(reshaped_positions, columns=column_names)
-        df.insert(0, "Frame #", np.arange(num_frames))  # Insert time column at the beginning
-
-        # Save to CSV
-        df.to_csv(save_path, index=False)
