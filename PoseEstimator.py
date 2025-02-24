@@ -11,7 +11,7 @@ class PoseEstimator:
 
     # Return pose data as a numpy array of shape (F, P, 2) where P is the # of points and F is the number of frames
     @staticmethod
-    def get_pose_data_from_video(video: Video, export_video: bool):
+    def get_pose_data_from_video(video: Video, export_video: bool, run_id: str):
         path = video.get_path()
 
         # Initialize pose estimator
@@ -27,8 +27,8 @@ class PoseEstimator:
 
         # Set output configuration
         if export_video:
-            os.makedirs('./output', exist_ok=True)
-            output_path = './output/out.mp4'
+            os.makedirs('./output_videos', exist_ok=True)
+            output_path = f'./output_videos/{run_id}_pose.mp4'
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 'mp4v' for .mp4 files
             out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 

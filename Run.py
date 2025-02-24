@@ -21,7 +21,7 @@ class Run:
             self.pose_data = pose_data
         else:
             # Use PoseEstimator to get pose estimation points from video in a np array
-            self.pose_data = pose.get_pose_data_from_video(self.video, export_video=True)
+            self.pose_data = pose.get_pose_data_from_video(self.video, export_video=True, run_id=self.id)
             print('Pose detection applied successfully.')
             input('Press enter to continue...')
 
