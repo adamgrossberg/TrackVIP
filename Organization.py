@@ -19,8 +19,8 @@ class Organization:
     def add_run(self, id: str, athlete_id: str, video_path: str):
         self.runs[id] = Run(id, athlete_id, video_path)
     
-    def add_user(self, id: str, name: str, can_view: bool, can_add: bool):
-        self.users[id] = User(id, name, can_view, can_add)
+    def add_user(self, id: str, name: str):
+        self.users[id] = User(id, name)
 
     def edit_athlete(self, id: str, first_name: str, last_name: str):
         self.athletes[id].first_name = first_name
@@ -29,10 +29,8 @@ class Organization:
     def edit_run(self, id: str, athlete_id: str, video_path: str):
         self.runs[id].athlete_id = athlete_id
     
-    def edit_user(self, id: str, name: str, can_view: bool, can_add: bool):
+    def edit_user(self, id: str, name: str):
         self.users[id].name = name
-        self.users[id].can_view = can_view
-        self.users[id].can_add = can_view
 
     def delete_athlete(self, id: str):
         self.athletes.pop(id)
@@ -56,12 +54,10 @@ class Organization:
         for user in self.users.values():
             id = user.id
             name = user.name
-            can_view = user.can_view
-            can_add = user.can_add
 
-            user_data.append([id, name, can_view, can_add])
+            user_data.append([id, name])
 
-        df = pd.DataFrame(user_data, columns=['id', 'name', 'can_view', 'can_add'])
+        df = pd.DataFrame(user_data, columns=['id', 'name'])
         df.to_csv(export_path + 'users.csv', index=False)
 
         #Athletes CSV
@@ -128,9 +124,7 @@ class Organization:
         for user in user_data:
             user_id = user[0]
             user_name = user[1]
-            can_view = (user[2] == 'True')
-            can_add = (user[3] == 'True')
-            self.users[user_id] = User(user_id, user_name, can_view, can_add)
+            self.users[user_id] = User(user_id, user_name)
         #Load Athletes from csv
         athlete_data = np.loadtxt(input_path + 'athletes.csv', dtype=str, delimiter=',', skiprows=1)
         if isinstance(athlete_data[0], str):

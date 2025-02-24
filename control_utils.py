@@ -62,12 +62,8 @@ def process_command(organization: Organization, command: str):
         case 'add user':
             id = input('User ID: ')
             name = input('User name: ')
-            can_view = input('Can view (y/n): ').lower()
-            can_add = input('Can add (y/n): ').lower()
-            can_view = can_view == 'y'
-            can_add = can_add == 'y'
 
-            organization.add_user(id, name, can_view, can_add)
+            organization.add_user(id, name)
             
             return f'User with ID {id} added successfully.'
         
@@ -93,12 +89,8 @@ def process_command(organization: Organization, command: str):
         case 'edit user':
             id = input('User ID: ')
             name = input('User name: ')
-            can_view = input('Can view (y/n): ').lower()
-            can_add = input('Can add (y/n): ').lower()
-            can_view = can_view == 'y'
-            can_add = can_add == 'y'
 
-            organization.edit_user(id, name, can_view, can_add)
+            organization.edit_user(id, name)
             
             return f'User with ID {id} edited successfully.'
         
