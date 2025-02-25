@@ -1,8 +1,9 @@
-from Run import Run
+from control_utils import *
 
-filename = input('Video filename: ')
-path = f'./input/{filename}'
+org = select_organization()
 
-athlete_name = input('Athlete name: ')
-
-testrun = Run(path, athlete_name)
+command = ''
+while command != 'quit':
+    command = command_input()
+    command_result = process_command(org, command)
+    print(command_result)
