@@ -1,3 +1,4 @@
 .venv/
-output/
 input/
+output_videos/
+save_data/

@@ -3,8 +3,6 @@ class Athlete:
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
-        self.runs = []
     
-    def add_run(self, run_id: str):
-        self.runs.append(run_id)
-        pass
+    def __str__(self):
+        return f'{self.id + ':':<20}{self.first_name} {self.last_name}'
