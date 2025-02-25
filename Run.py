@@ -1,6 +1,4 @@
 from run_utils import *
-from PoseEstimator import PoseEstimator as pose
-from Visualizer import Visualizer as viz
 
 class Run:
 
@@ -20,8 +18,7 @@ class Run:
         if pose_data is not None:
             self.pose_data = pose_data
         else:
-            # Use PoseEstimator to get pose estimation points from video in a np array
-            self.pose_data = pose.get_pose_data_from_video(self.video, export_video=True, run_id=self.id)
+            self.pose_data = get_pose_data_from_video(self.video, export_video=True, run_id=self.id)
             print('Pose detection applied successfully.')
             input('Press enter to continue...')
 
