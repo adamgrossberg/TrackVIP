@@ -32,7 +32,12 @@ def convert_to_mp4(path: str) -> str:
             # Save the clip as an .MP4 file
             clip.write_videofile(output_file_path, codec="libx264", audio_codec="aac")
 
-            print('Done.')
+            try:
+                #Delete original video file
+                os.remove(path)
+            except PermissionError:
+                pass
+
             return output_file_path, clip
     else:
         raise FileNotFoundError(f'{path} not found.')

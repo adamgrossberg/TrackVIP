@@ -29,6 +29,7 @@ def select_organization():
             if retry_prompt.lower() == 'y':
                 org_name = input("New organization name: ")
                 org = Organization(org_id, org_name)
+                break
     print(f'{org.name} ({org.id}) loaded.')
     return org
 

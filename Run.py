@@ -17,7 +17,7 @@ class Run:
             print(f'Created Video object: {str(self.video)}')
             input('Press enter to continue...')
 
-        if pose_data.any():
+        if pose_data is not None:
             self.pose_data = pose_data
         else:
             # Use PoseEstimator to get pose estimation points from video in a np array
