@@ -1,8 +1,7 @@
 from Organization import Organization
-from typing import Tuple
 import os
 
-def add_athlete_is_valid(org: Organization, athlete_id: str) -> Tuple[bool, str]:
+def add_athlete_is_valid(org: Organization, athlete_id: str) -> tuple[bool, str]:
     result = True
     message = 'Invalid.'
     
@@ -12,7 +11,7 @@ def add_athlete_is_valid(org: Organization, athlete_id: str) -> Tuple[bool, str]
     
     return result, message
 
-def add_run_is_valid(org: Organization, run_id: str, athlete_id: str, video_path: str) -> Tuple[bool, str]:
+def add_run_is_valid(org: Organization, run_id: str, athlete_id: str, video_path: str) -> tuple[bool, str]:
     result = True
     message = 'Invalid.'
 
@@ -28,7 +27,7 @@ def add_run_is_valid(org: Organization, run_id: str, athlete_id: str, video_path
     
     return result, message
 
-def edit_athlete_is_valid(org: Organization, athlete_id: str) -> Tuple[bool, str]:
+def edit_athlete_is_valid(org: Organization, athlete_id: str) -> tuple[bool, str]:
     result = True
     message = 'Invalid.'
 
@@ -38,7 +37,7 @@ def edit_athlete_is_valid(org: Organization, athlete_id: str) -> Tuple[bool, str
 
     return result, message
 
-def edit_run_is_valid(org: Organization, run_id: str, athlete_id: str) -> Tuple[bool, str]:
+def edit_run_is_valid(org: Organization, run_id: str, athlete_id: str) -> tuple[bool, str]:
     result = True
     message = 'Invalid.'
 
@@ -51,7 +50,7 @@ def edit_run_is_valid(org: Organization, run_id: str, athlete_id: str) -> Tuple[
 
     return result, message
 
-def delete_athlete_is_valid(org: Organization, athlete_id: str) -> Tuple[bool, str]:
+def delete_athlete_is_valid(org: Organization, athlete_id: str) -> tuple[bool, str]:
     result = True
     message = 'Invalid.'
 
@@ -61,7 +60,7 @@ def delete_athlete_is_valid(org: Organization, athlete_id: str) -> Tuple[bool, s
 
     return result, message
 
-def delete_run_is_valid(org: Organization, run_id: str) -> Tuple[bool, str]:
+def delete_run_is_valid(org: Organization, run_id: str) -> tuple[bool, str]:
     result = True
     message = 'Invalid.'
 

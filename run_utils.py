@@ -46,7 +46,7 @@ def convert_to_mp4(path: str) -> str:
     else:
         raise FileNotFoundError(f'{path} not found.')
 
-def get_pose_data_from_video(video: Video, export_video: bool, run_id: str):
+def get_pose_data_from_video(video: Video, export_video: bool, run_id: str) -> np.ndarray:
     path = video.get_path()
 
     # Initialize pose estimator
@@ -126,7 +126,7 @@ def get_pose_data_from_video(video: Video, export_video: bool, run_id: str):
 
     return pose_data
 
-def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int], end_10m_coords: tuple[int, int], fps: float):
+def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int], end_10m_coords: tuple[int, int], fps: float) -> np.ndarray:
     pose_data_with_com = np.append(pose_data, np.reshape(np.average(pose_data, axis=1), (pose_data.shape[0], 1, pose_data.shape[1])), axis=1)
 
     #Extract x-coordinates of landmarks from data. Shape (num_frames, num_landmarks)
@@ -144,11 +144,11 @@ def calculate_x_velocity(pose_data: np.ndarray, start_10m_coords: tuple[int, int
 
     return result
 
-def smooth(data: np.ndarray, window_size: int):
+def smooth(data: np.ndarray, window_size: int) -> np.ndarray:
     kernel = np.ones(window_size) / window_size
     return np.apply_along_axis(lambda m: np.convolve(m, kernel, mode='same'), axis=0, arr=data)
 
-def create_velocity_graph(velocity_data: np.ndarray, fps: float):
+def create_velocity_graph(velocity_data: np.ndarray, fps: float) -> str:
     save_path = './output/graphs/velocity_time.png'
     num_frames, num_points = velocity_data.shape
     time_axis = np.arange(num_frames) / fps  # Time in seconds

@@ -16,7 +16,7 @@ VALID_COMMANDS = {
     'delete run': 'remove a run from your organization'
     }
 
-def load_organization():
+def load_organization() -> Organization:
     os.makedirs('./save_data', exist_ok=True)
     org = Organization('', '')
     org.load_from_csv()
@@ -29,10 +29,9 @@ def select_user(organization: Organization) -> User:
     else:
         while user_id not in organization.users.keys():
             user_id = input('Invalid User ID. Try again: ')
-            if user_id in organization.users.keys():
-                return organization.users[user_id]
+        return organization.users[user_id]
 
-def command_input():
+def command_input() -> str:
     command = input('Enter a command: ')
 
     while command.lower() not in VALID_COMMANDS.keys():
@@ -40,7 +39,7 @@ def command_input():
     
     return command
 
-def process_command(organization: Organization, command: str):
+def process_command(organization: Organization, command: str) -> str:
     
     match command:
         case 'list':

@@ -13,35 +13,35 @@ class Organization:
         self.runs = {} # {id: Run}
         self.users = {} # {id: User}
     
-    def add_athlete(self, id: str, first_name: str, last_name: str):
+    def add_athlete(self, id: str, first_name: str, last_name: str) -> None:
         self.athletes[id] = Athlete(id, first_name, last_name)
 
-    def add_run(self, id: str, athlete_id: str, video_path: str):
+    def add_run(self, id: str, athlete_id: str, video_path: str) -> None:
         self.runs[id] = Run(id, athlete_id, video_path)
     
-    def add_user(self, id: str, name: str):
+    def add_user(self, id: str, name: str) -> None:
         self.users[id] = User(id, name)
 
-    def edit_athlete(self, id: str, first_name: str, last_name: str):
+    def edit_athlete(self, id: str, first_name: str, last_name: str) -> None:
         self.athletes[id].first_name = first_name
         self.athletes[id].last_name = last_name
 
-    def edit_run(self, id: str, athlete_id: str):
+    def edit_run(self, id: str, athlete_id: str) -> None:
         self.runs[id].athlete_id = athlete_id
     
-    def edit_user(self, id: str, name: str):
+    def edit_user(self, id: str, name: str) -> None:
         self.users[id].name = name
 
-    def delete_athlete(self, id: str):
+    def delete_athlete(self, id: str) -> None:
         self.athletes.pop(id)
     
-    def delete_run(self, id: str):
+    def delete_run(self, id: str) -> None:
         self.runs.pop(id)
     
-    def delete_user(self, id: str):
+    def delete_user(self, id: str) -> None:
         self.users.pop(id)
 
-    def save_to_csv(self):
+    def save_to_csv(self) -> None:
         export_path = f'./save_data/'
         os.makedirs(export_path + 'pose_data', exist_ok=True)
 
@@ -93,7 +93,7 @@ class Organization:
                                              'start_10m_coords_x', 'start_10m_coords_y', 'end_10m_coords_x', 'end_10m_coords_y'])
         df.to_csv(export_path + 'runs.csv', index=False)
 
-    def load_from_csv(self):
+    def load_from_csv(self) -> None:
         self.athletes = {}
         self.runs = {}
         self.users = {}
