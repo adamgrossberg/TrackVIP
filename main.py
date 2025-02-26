@@ -1,6 +1,10 @@
 from control_utils import *
 
-org = select_organization()
+org = load_organization()
+print(f'Successfully loaded {org.name}')
+
+user = select_user(org)
+print(f'Welcome, {user.name}')
 
 command = ''
 while command != 'quit':

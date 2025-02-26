@@ -1,4 +1,5 @@
 from Organization import Organization
+from User import User
 import os
 
 VALID_COMMANDS = {
@@ -6,32 +7,29 @@ VALID_COMMANDS = {
     'quit': 'close the system', 
     'save': 'save current organization configuration',
     'status': 'see the current organization configuration',
-    'add user': 'add a user to your organization',
     'add athlete': 'add an athlete to your organization',
     'add run': 'add a run to your organization',
-    'edit user': 'edit a user in your organization',
     'edit athlete': 'edit an athlete in your organization',
     'edit run': 'edit a run in your organization',
-    'delete user': 'remove a user from your organization',
     'delete athlete': 'remove an athlete from your organization',
     'delete run': 'remove a run from your organization'
     }
 
-def select_organization():
-    while True:
-        org_id = input('Organization ID: ')
-        if os.path.exists(f'./save_data/{org_id}'):
-            org = Organization('', '')
-            org.load_from_csv(org_id)
-            break
-        else:
-            retry_prompt = input('No existing organization with that ID. Do you want to create a new organization? (y/n) ')
-            if retry_prompt.lower() == 'y':
-                org_name = input("New organization name: ")
-                org = Organization(org_id, org_name)
-                break
-    print(f'{org.name} ({org.id}) loaded.')
+def load_organization():
+    os.makedirs('./save_data', exist_ok=True)
+    org = Organization('', '')
+    org.load_from_csv()
     return org
+
+def select_user(organization: Organization) -> User:
+    user_id = input('User ID: ')
+    if user_id in organization.users.keys():
+        return organization.users[user_id]
+    else:
+        while user_id not in organization.users.keys():
+            user_id = input('Invalid User ID. Try again: ')
+            if user_id in organization.users.keys():
+                return organization.users[user_id]
 
 def command_input():
     command = input('Enter a command: ')
@@ -54,19 +52,11 @@ def process_command(organization: Organization, command: str):
             return str(organization)
         
         case 'save':
-            path = f'.\\save_data\\{organization.id}'
+            path = f'.\\save_data'
             
             organization.save_to_csv()
 
             return f'Organization data saved to {path}'
-
-        case 'add user':
-            id = input('User ID: ')
-            name = input('User name: ')
-
-            organization.add_user(id, name)
-            
-            return f'User with ID {id} added successfully.'
         
         case 'add athlete':
             id = input('Athlete ID: ')
@@ -87,14 +77,6 @@ def process_command(organization: Organization, command: str):
 
             return f'Run {id} added successfully.'
         
-        case 'edit user':
-            id = input('User ID: ')
-            name = input('User name: ')
-
-            organization.edit_user(id, name)
-            
-            return f'User with ID {id} edited successfully.'
-        
         case 'edit athlete':
             id = input('Athlete ID: ')
             first_name = input('First name: ')
@@ -111,13 +93,6 @@ def process_command(organization: Organization, command: str):
             organization.edit_run(id, athlete_id)
 
             return f'Run {id} edited successfully.'
-        
-        case 'delete user':
-            id = input('User ID: ')
-
-            organization.delete_user(id)
-
-            return f'Succefully deleted user {id}.'
         
         case 'delete athlete':
             id = input('Athlete ID: ')
