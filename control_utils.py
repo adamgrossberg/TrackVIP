@@ -64,7 +64,7 @@ def process_command(organization: Organization, command: str):
             first_name = input('First name: ')
             last_name = input('Last name: ')
 
-            valid, message = athlete_is_valid(organization, id)
+            valid, message = add_athlete_is_valid(organization, id)
             if not valid:
                 return message
             else:
@@ -77,7 +77,7 @@ def process_command(organization: Organization, command: str):
             video_path = input('Video file name: ')
             video_path = './input/' + video_path
 
-            valid, message = run_is_valid(organization, id, athlete_id, video_path)
+            valid, message = add_run_is_valid(organization, id, athlete_id, video_path)
             if not valid:
                 return message
             else:
@@ -89,17 +89,22 @@ def process_command(organization: Organization, command: str):
             first_name = input('First name: ')
             last_name = input('Last name: ')
 
-            organization.edit_athlete(id, first_name, last_name)
-        
-            return f'Athlete {first_name} {last_name} ({id}) edited auccessfully.'
+            valid, message = edit_athlete_is_valid(organization, athlete_id)
+            if not valid:
+                return message
+            else:
+                organization.edit_athlete(id, first_name, last_name)
+                return f'Athlete {first_name} {last_name} ({id}) edited auccessfully.'
         
         case 'edit run':
             id = input('Run ID: ')
             athlete_id = input('Athlete ID: ')
-
-            organization.edit_run(id, athlete_id)
-
-            return f'Run {id} edited successfully.'
+            valid, message = edit_run_is_valid(organization, id, athlete_id)
+            if not valid:
+                return message
+            else:
+                organization.edit_run(id, athlete_id)
+                return f'Run {id} edited successfully.'
         
         case 'delete athlete':
             id = input('Athlete ID: ')

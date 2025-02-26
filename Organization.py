@@ -26,7 +26,7 @@ class Organization:
         self.athletes[id].first_name = first_name
         self.athletes[id].last_name = last_name
 
-    def edit_run(self, id: str, athlete_id: str, video_path: str):
+    def edit_run(self, id: str, athlete_id: str):
         self.runs[id].athlete_id = athlete_id
     
     def edit_user(self, id: str, name: str):
