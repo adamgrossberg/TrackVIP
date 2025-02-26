@@ -42,23 +42,8 @@ class Organization:
         self.users.pop(id)
 
     def save_to_csv(self):
-        export_path = f'./save_data/{self.id}/'
+        export_path = f'./save_data/'
         os.makedirs(export_path + 'pose_data', exist_ok=True)
-
-        #Organization information (just name for now)
-        name_arr = np.array([['name'], [self.name]])
-        np.savetxt(export_path + f'{self.id}_info.csv', name_arr, fmt='%s', delimiter=',')
-
-        #Users CSV
-        user_data = []
-        for user in self.users.values():
-            id = user.id
-            name = user.name
-
-            user_data.append([id, name])
-
-        df = pd.DataFrame(user_data, columns=['id', 'name'])
-        df.to_csv(export_path + 'users.csv', index=False)
 
         #Athletes CSV
         athlete_data = []
@@ -108,17 +93,17 @@ class Organization:
                                              'start_10m_coords_x', 'start_10m_coords_y', 'end_10m_coords_x', 'end_10m_coords_y'])
         df.to_csv(export_path + 'runs.csv', index=False)
 
-    def load_from_csv(self, id: str):
-        self.id = id
+    def load_from_csv(self):
         self.athletes = {}
         self.runs = {}
         self.users = {}
 
-        input_path = f'./save_data/{id}/'
-        org_info = np.loadtxt(input_path + f'{id}_info.csv', dtype=str, delimiter=',', skiprows=1)
-        self.name = org_info
+        input_path = f'./save_data/'
+        org_info = np.loadtxt('./init_data/organization_info.csv', dtype=str, delimiter=',', skiprows=1)
+        self.id = org_info[0]
+        self.name = org_info[1]
         #Load Users from csv
-        user_data = np.loadtxt(input_path + 'users.csv', dtype=str, delimiter=',', skiprows=1)
+        user_data = np.loadtxt('./init_data/users.csv', dtype=str, delimiter=',', skiprows=1)
         if isinstance(user_data[0], str):
             user_data = [user_data]
         for user in user_data:
@@ -126,35 +111,37 @@ class Organization:
             user_name = user[1]
             self.users[user_id] = User(user_id, user_name)
         #Load Athletes from csv
-        athlete_data = np.loadtxt(input_path + 'athletes.csv', dtype=str, delimiter=',', skiprows=1)
-        if isinstance(athlete_data[0], str):
-            athlete_data = [athlete_data]
-        for athlete in athlete_data:
-            athlete_id = athlete[0]
-            first_name = athlete[1]
-            last_name = athlete[2]
-            self.athletes[athlete_id] = Athlete(athlete_id, first_name, last_name)
+        if os.path.exists(input_path + 'athletes.csv'):
+            athlete_data = np.loadtxt(input_path + 'athletes.csv', dtype=str, delimiter=',', skiprows=1)
+            if isinstance(athlete_data[0], str):
+                athlete_data = [athlete_data]
+            for athlete in athlete_data:
+                athlete_id = athlete[0]
+                first_name = athlete[1]
+                last_name = athlete[2]
+                self.athletes[athlete_id] = Athlete(athlete_id, first_name, last_name)
         #Load Runs and pose data from csv
-        run_data = np.loadtxt(input_path + 'runs.csv', dtype=str, delimiter=',', skiprows=1)
-        if isinstance(run_data[0], str):
-            run_data = [run_data]
-        for run in run_data:
-            run_id = run[0]
-            athlete_id = run[1]
-            video_path = run[2]
-            video_fps = float(run[3])
-            video_resolution_x = int(run[4])
-            video_resolution_y = int(run[5])
-            start_10m_coords_x = int(run[6])
-            start_10m_coords_y = int(run[7])
-            end_10m_coords_x = int(run[8])
-            end_10m_coords_y = int(run[9])
+        if os.path.exists(input_path + 'runs.csv'):
+            run_data = np.loadtxt(input_path + 'runs.csv', dtype=str, delimiter=',', skiprows=1)
+            if isinstance(run_data[0], str):
+                run_data = [run_data]
+            for run in run_data:
+                run_id = run[0]
+                athlete_id = run[1]
+                video_path = run[2]
+                video_fps = float(run[3])
+                video_resolution_x = int(run[4])
+                video_resolution_y = int(run[5])
+                start_10m_coords_x = int(run[6])
+                start_10m_coords_y = int(run[7])
+                end_10m_coords_x = int(run[8])
+                end_10m_coords_y = int(run[9])
 
-            pose_data = np.loadtxt(input_path + f'pose_data/{run_id}.csv', delimiter=',', skiprows=1)[:, 1:]
-            pose_data = pose_data.reshape(pose_data.shape[0], pose_data.shape[1] // 2, 2)
+                pose_data = np.loadtxt(input_path + f'pose_data/{run_id}.csv', delimiter=',', skiprows=1)[:, 1:]
+                pose_data = pose_data.reshape(pose_data.shape[0], pose_data.shape[1] // 2, 2)
 
-            self.runs[run_id] = Run(run_id, athlete_id, video_path, video_fps, (video_resolution_x, video_resolution_y), pose_data, 
-                                    (start_10m_coords_x, start_10m_coords_y), (end_10m_coords_x, end_10m_coords_y))
+                self.runs[run_id] = Run(run_id, athlete_id, video_path, video_fps, (video_resolution_x, video_resolution_y), pose_data, 
+                                        (start_10m_coords_x, start_10m_coords_y), (end_10m_coords_x, end_10m_coords_y))
 
     def __str__(self):
         result = f'Organization: {self.name} ({self.id}) \n'
