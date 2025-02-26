@@ -8,6 +8,7 @@ print(f'Welcome, {user.name}')
 
 command = ''
 while command != 'quit':
+    print()
     command = command_input()
     command_result = process_command(org, command)
     print(command_result)

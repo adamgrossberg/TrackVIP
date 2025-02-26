@@ -1,3 +1,4 @@
+from validation import *
 from Organization import Organization
 from User import User
 import os
@@ -63,9 +64,12 @@ def process_command(organization: Organization, command: str):
             first_name = input('First name: ')
             last_name = input('Last name: ')
 
-            organization.add_athlete(id, first_name, last_name)
-        
-            return f'Athlete {first_name} {last_name} ({id}) added auccessfully.'
+            valid, message = athlete_is_valid(organization, id)
+            if not valid:
+                return message
+            else:
+                organization.add_athlete(id, first_name, last_name)
+                return f'Athlete {first_name} {last_name} ({id}) added auccessfully.'
         
         case 'add run':
             id = input('Run ID: ')
@@ -73,9 +77,12 @@ def process_command(organization: Organization, command: str):
             video_path = input('Video file name: ')
             video_path = './input/' + video_path
 
-            organization.add_run(id, athlete_id, video_path)
-
-            return f'Run {id} added successfully.'
+            valid, message = run_is_valid(organization, id, athlete_id, video_path)
+            if not valid:
+                return message
+            else:
+                organization.add_run(id, athlete_id, video_path)
+                return f'Run {id} added successfully.'
         
         case 'edit athlete':
             id = input('Athlete ID: ')
