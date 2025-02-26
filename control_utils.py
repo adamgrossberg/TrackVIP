@@ -33,6 +33,14 @@ def select_organization():
     print(f'{org.name} ({org.id}) loaded.')
     return org
 
+def select_user_permissions():
+    user_id = input('User ID: ')
+    match user_id:
+        case 'admin':
+            return
+        case 'coach':
+            return
+
 def command_input():
     command = input('Enter a command: ')
 
@@ -59,14 +67,6 @@ def process_command(organization: Organization, command: str):
             organization.save_to_csv()
 
             return f'Organization data saved to {path}'
-
-        case 'add user':
-            id = input('User ID: ')
-            name = input('User name: ')
-
-            organization.add_user(id, name)
-            
-            return f'User with ID {id} added successfully.'
         
         case 'add athlete':
             id = input('Athlete ID: ')
@@ -87,14 +87,6 @@ def process_command(organization: Organization, command: str):
 
             return f'Run {id} added successfully.'
         
-        case 'edit user':
-            id = input('User ID: ')
-            name = input('User name: ')
-
-            organization.edit_user(id, name)
-            
-            return f'User with ID {id} edited successfully.'
-        
         case 'edit athlete':
             id = input('Athlete ID: ')
             first_name = input('First name: ')
@@ -111,13 +103,6 @@ def process_command(organization: Organization, command: str):
             organization.edit_run(id, athlete_id)
 
             return f'Run {id} edited successfully.'
-        
-        case 'delete user':
-            id = input('User ID: ')
-
-            organization.delete_user(id)
-
-            return f'Succefully deleted user {id}.'
         
         case 'delete athlete':
             id = input('Athlete ID: ')
