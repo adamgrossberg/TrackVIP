@@ -109,16 +109,24 @@ def process_command(organization: Organization, command: str):
         case 'delete athlete':
             id = input('Athlete ID: ')
 
-            organization.delete_athlete(id)
+            valid, message = delete_athlete_is_valid(organization, id)
 
-            return f'Succefully deleted athlete {id}.'
+            if not valid:
+                return message
+            else:
+                organization.delete_athlete(id)
+                return f'Successfully deleted athlete {id}.'
         
         case 'delete run':
             id = input('Run ID: ')
 
-            organization.delete_run(id)
+            valid, message = delete_run_is_valid(organization, id)
 
-            return f'Succefully deleted run {id}.'
+            if not valid:
+                return message
+            else:
+                organization.delete_run(id)
+                return f'Successfully deleted run {id}.'
 
         case _:
             return ''
