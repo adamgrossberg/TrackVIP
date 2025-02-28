@@ -5,3 +5,4 @@ opencv-python
 mediapipe
 tqdm
 pandas
+sqlalchemy
