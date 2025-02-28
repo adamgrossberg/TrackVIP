@@ -19,7 +19,7 @@ VALID_COMMANDS = {
 def load_organization() -> Organization:
     os.makedirs('./save_data', exist_ok=True)
     org = Organization('', '')
-    org.load_from_csv()
+    org.load_from_db()
     return org
 
 def select_user(organization: Organization) -> User:
@@ -54,9 +54,9 @@ def process_command(organization: Organization, command: str) -> str:
         case 'save':
             path = f'.\\save_data'
             
-            organization.save_to_csv()
+            organization.save_to_db()
 
-            return f'Organization data saved to {path}'
+            return f'Organization data saved to database.'
         
         case 'add athlete':
             id = input('Athlete ID: ')
