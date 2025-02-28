@@ -6,3 +6,4 @@ mediapipe
 tqdm
 pandas
 sqlalchemy
+json
