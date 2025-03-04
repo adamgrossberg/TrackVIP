@@ -1,6 +1,12 @@
-from sqlalchemy import create_engine, Column, String, Integer, Float, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy.orm import relationship
 from database_utils import Base
+
+class UserDB(Base):
+    __tablename__ = 'users'
+
+    id = Column(String, primary_key=True)
+    name = Column(String, nullable=False)
 
 class AthleteDB(Base):
     __tablename__ = 'athletes'
@@ -38,4 +44,4 @@ class RunDB(Base):
 
     # Relationships
     athlete = relationship("AthleteDB", back_populates="runs")
-    video = relationship("VideoDB", back_populates="run", uselist=False)  # Ensures 1-to-1
+    video = relationship("VideoDB", back_populates="run", uselist=False, cascade="all, delete-orphan", single_parent=True)  # Ensures 1-to-1
