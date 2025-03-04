@@ -17,9 +17,8 @@ VALID_COMMANDS = {
     }
 
 def load_organization() -> Organization:
-    os.makedirs('./save_data', exist_ok=True)
-    org = Organization('', '')
-    org.load_from_csv()
+    org = Organization('gttrack', 'Georgia Tech Track')
+    org.load_from_db()
     return org
 
 def select_user(organization: Organization) -> User:
@@ -54,9 +53,9 @@ def process_command(organization: Organization, command: str) -> str:
         case 'save':
             path = f'.\\save_data'
             
-            organization.save_to_csv()
+            organization.save_to_db()
 
-            return f'Organization data saved to {path}'
+            return f'Organization data saved to database.'
         
         case 'add athlete':
             id = input('Athlete ID: ')
@@ -88,7 +87,7 @@ def process_command(organization: Organization, command: str) -> str:
             first_name = input('First name: ')
             last_name = input('Last name: ')
 
-            valid, message = edit_athlete_is_valid(organization, athlete_id)
+            valid, message = edit_athlete_is_valid(organization, id)
             if not valid:
                 return message
             else:
@@ -98,11 +97,11 @@ def process_command(organization: Organization, command: str) -> str:
         case 'edit run':
             id = input('Run ID: ')
             athlete_id = input('Athlete ID: ')
-            valid, message = edit_run_is_valid(organization, id, athlete_id)
+            valid, message = edit_run_is_valid(organization, id, id)
             if not valid:
                 return message
             else:
-                organization.edit_run(id, athlete_id)
+                organization.edit_run(id, id)
                 return f'Run {id} edited successfully.'
         
         case 'delete athlete':

@@ -1,9 +1,13 @@
 from Athlete import Athlete
 from Run import Run
 from User import User
+from Video import Video
 import pandas as pd
 import numpy as np
 import os
+from database_utils import *
+from orm_classes import UserDB, AthleteDB, RunDB, VideoDB
+import json
 
 class Organization:
     def __init__(self, id: str, name: str):
@@ -12,12 +16,19 @@ class Organization:
         self.athletes = {} # {id: Athlete}
         self.runs = {} # {id: Run}
         self.users = {} # {id: User}
+
+        self.session = start_database_session()
     
     def add_athlete(self, id: str, first_name: str, last_name: str) -> None:
-        self.athletes[id] = Athlete(id, first_name, last_name)
+        athlete = Athlete(id, first_name, last_name)
+        self.athletes[id] = athlete
+        self.session.add(athlete.to_db())
 
     def add_run(self, id: str, athlete_id: str, video_path: str) -> None:
-        self.runs[id] = Run(id, athlete_id, video_path)
+        run = Run(id, athlete_id, video_path)
+        self.runs[id] = run
+        self.session.add(run.to_db())
+        self.session.add(run.video.to_db())
     
     def add_user(self, id: str, name: str) -> None:
         self.users[id] = User(id, name)
@@ -25,17 +36,26 @@ class Organization:
     def edit_athlete(self, id: str, first_name: str, last_name: str) -> None:
         self.athletes[id].first_name = first_name
         self.athletes[id].last_name = last_name
+        db_athlete = self.session.query(AthleteDB).filter_by(id=id).first()
+        db_athlete.first_name = first_name
+        db_athlete.last_name = last_name
 
     def edit_run(self, id: str, athlete_id: str) -> None:
         self.runs[id].athlete_id = athlete_id
+        db_run = self.session.query(RunDB).filter_by(id=id).first()
+        db_run.athlete_id = athlete_id
     
     def edit_user(self, id: str, name: str) -> None:
         self.users[id].name = name
 
     def delete_athlete(self, id: str) -> None:
+        db_athlete = self.session.query(AthleteDB).filter_by(id=id).first()
+        self.session.delete(db_athlete)
         self.athletes.pop(id)
     
     def delete_run(self, id: str) -> None:
+        db_run = self.session.query(RunDB).filter_by(id=id).first()
+        self.session.delete(db_run)
         self.runs.pop(id)
     
     def delete_user(self, id: str) -> None:
@@ -123,7 +143,7 @@ class Organization:
         #Load Runs and pose data from csv
         if os.path.exists(input_path + 'runs.csv'):
             run_data = np.loadtxt(input_path + 'runs.csv', dtype=str, delimiter=',', skiprows=1)
-            if isinstance(run_data[0], str):
+            if len(run_data) > 0 and isinstance(run_data[0], str):
                 run_data = [run_data]
             for run in run_data:
                 run_id = run[0]
@@ -140,8 +160,51 @@ class Organization:
                 pose_data = np.loadtxt(input_path + f'pose_data/{run_id}.csv', delimiter=',', skiprows=1)[:, 1:]
                 pose_data = pose_data.reshape(pose_data.shape[0], pose_data.shape[1] // 2, 2)
 
-                self.runs[run_id] = Run(run_id, athlete_id, video_path, video_fps, (video_resolution_x, video_resolution_y), pose_data, 
+                self.runs[run_id] = Run(run_id, athlete_id, video_path, Video(video_path, video_fps, (video_resolution_x, video_resolution_y)), pose_data, 
                                         (start_10m_coords_x, start_10m_coords_y), (end_10m_coords_x, end_10m_coords_y))
+
+    def load_from_db(self) -> None:
+        
+        try:
+            #Load Users
+            db_users = self.session.query(UserDB).all()
+            self.users = {u.id: User.from_db(u) for u in db_users}
+            # Load athletes
+            db_athletes = self.session.query(AthleteDB).all()
+            self.athletes = {a.id: Athlete.from_db(a) for a in db_athletes}
+
+            # Load videos into a dictionary for quick lookup
+            db_videos = self.session.query(VideoDB).all()
+            video_dict = {v.id: Video.from_db(v) for v in db_videos}  # {video_id: Video object}
+
+            # Load runs
+            db_runs = self.session.query(RunDB).all()
+            for db_run in db_runs:
+                # Retrieve the corresponding Video object
+                video_obj = video_dict[db_run.video_id]
+
+                # Construct Run object using preloaded Video object
+                run = Run(
+                    id=db_run.id,
+                    athlete_id=db_run.athlete_id,
+                    video_path=video_obj.path,  # video_id is the path
+                    video=video_obj,  # Pass the preloaded Video object
+                    pose_data=np.array(json.loads(db_run.pose_data)) if db_run.pose_data else None,
+                    start_10m_coords=(db_run.start_10m_x, db_run.start_10m_y),
+                    end_10m_coords=(db_run.end_10m_x, db_run.end_10m_y)
+                )
+
+                # Store in dictionary
+                self.runs[run.id] = run
+
+            print("All data successfully loaded from the database.")
+
+        except Exception as e:
+            print(f"Error loading data from database: {e}")
+
+    def save_to_db(self) -> None:
+        self.session.commit()
+        self.load_from_db()
 
     def __str__(self):
         result = f'Organization: {self.name} ({self.id}) \n'

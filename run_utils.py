@@ -8,11 +8,12 @@ import mediapipe as mp
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-def get_video_from_path(path: str) -> Video:
+def get_video_from_path(path: str, run_id:str) -> Video:
+        id = run_id + '_video'
         path, videofileclip = convert_to_mp4(path)
         fps = float(videofileclip.fps)
         resolution = videofileclip.size
-        return Video(path, fps, resolution)
+        return Video(id, path, fps, resolution)
 
 def convert_to_mp4(path: str) -> str:
 
@@ -47,7 +48,7 @@ def convert_to_mp4(path: str) -> str:
         raise FileNotFoundError(f'{path} not found.')
 
 def get_pose_data_from_video(video: Video, export_video: bool, run_id: str) -> np.ndarray:
-    path = video.get_path()
+    path = video.path
 
     # Initialize pose estimator
     mp_drawing = mp.solutions.drawing_utils
@@ -58,7 +59,7 @@ def get_pose_data_from_video(video: Video, export_video: bool, run_id: str) -> n
     cap = cv2.VideoCapture(path)
     frame_width = video.get_resolution_x()
     frame_height = video.get_resolution_y()
-    fps = int(video.get_fps())
+    fps = int(video.fps)
 
     # Set output configuration
     if export_video:
