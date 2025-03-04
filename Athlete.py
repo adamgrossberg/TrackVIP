@@ -1,4 +1,4 @@
-from orm_classes import AthleteDB
+from database import AthleteDB
 
 class Athlete:
     def __init__(self, id: str, first_name: str, last_name: str):

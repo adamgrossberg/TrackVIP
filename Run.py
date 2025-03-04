@@ -1,6 +1,6 @@
 from run_utils import *
 import json
-from orm_classes import RunDB
+from database import RunDB
 
 class Run:
 

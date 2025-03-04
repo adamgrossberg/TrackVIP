@@ -1,4 +1,4 @@
-from orm_classes import VideoDB
+from database import VideoDB
 
 class Video:
     
