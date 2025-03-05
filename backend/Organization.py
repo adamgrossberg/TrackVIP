@@ -2,9 +2,7 @@ from Athlete import Athlete
 from Run import Run
 from User import User
 from Video import Video
-import pandas as pd
 import numpy as np
-import os
 from database import *
 import json
 
@@ -61,6 +59,9 @@ class Organization:
         self.users.pop(id)
 
     def load_from_db(self) -> None:
+        self.athletes = {} # {id: Athlete}
+        self.runs = {} # {id: Run}
+        self.users = {} # {id: User}
         
         try:
             #Load Users
