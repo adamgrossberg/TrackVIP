@@ -24,3 +24,14 @@ Create a folder called *database* - this is where you will create your local SQL
 ## SQLite
 
 Follow these steps to download SQLite: https://www.youtube.com/watch?v=-bDwNR_C0dE
+- Make sure you add your SQLite folder to your path variable
+
+### Add system users
+
+Run *main.py* once, then quit immediately. This will create your database. Open a command prompt in your *database* folder. Run the following command to enter your database:
+
+**$ sqlite3 gttrack.db**
+
+Within the SQLite CLI, insert your users using SQL:
+
+**INSERT INTO USERS VALUES('<id>', '<name>')**
