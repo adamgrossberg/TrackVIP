@@ -1,4 +1,4 @@
-from orm_classes import UserDB
+from database import UserDB
 
 class User:
     def __init__(self, id: str, name:str):
