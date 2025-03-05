@@ -14,4 +14,4 @@ class Athlete:
         return Athlete(id=db_athlete.id, first_name=db_athlete.first_name, last_name=db_athlete.last_name)
     
     def __str__(self):
-        return f'{self.id + ':':<20}{self.first_name} {self.last_name}'
+        return f'{self.id + ":":<20}{self.first_name} {self.last_name}'

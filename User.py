@@ -13,4 +13,4 @@ class User:
         return User(id=db_user.id, name=db_user.name)
     
     def __str__(self):
-        return f'{self.id + ':':<20}{self.name:<20}'
+        return f'{self.id + ":":<20}{self.name:<20}'

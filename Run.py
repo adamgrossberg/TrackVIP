@@ -61,5 +61,5 @@ class Run:
         )
     
     def __str__(self):
-        result = f'{self.id + ':':<20}{self.athlete_id:<20}'
+        result = f'{self.id + ":":<20}{self.athlete_id:<20}'
         return result
