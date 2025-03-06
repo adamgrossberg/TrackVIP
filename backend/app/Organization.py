@@ -9,6 +9,7 @@ from app.database import *
 import numpy as np
 import json
 
+
 class Organization:
     def __init__(self, id: str, name: str):
         self.id = id
@@ -18,13 +19,17 @@ class Organization:
         self.users = {} # {id: User}
 
         self.session = start_database_session()
+        self.load_from_db()
     
-    def create_athlete(self, api_athlete: AthleteCreate):
-        athlete = Athlete(api_athlete.id, api_athlete.first_name, api_athlete.last_name)
+    def create_athlete(self, id: str, first_name: str, last_name: str):
+        if id in self.athletes:
+            return None
+
+        athlete = Athlete(id, first_name, last_name)
         self.athletes[id] = athlete
         self.session.add(athlete.to_db())
         self.save_to_db()
-        return AthleteResponse(id=api_athlete.id, first_name=api_athlete.first_name, last_name=api_athlete.last_name)
+        return AthleteResponse(id=id, first_name=first_name, last_name=last_name)
     
     def get_athlete(self, id: str):
         athlete = self.athletes.get(id)
@@ -33,16 +38,16 @@ class Organization:
         else:
             return None
 
-    def edit_athlete(self, api_athlete: AthleteUpdate) -> AthleteResponse:
-        athlete = self.athletes[api_athlete.id]
+    def edit_athlete(self, id: str, first_name: str, last_name: str) -> AthleteResponse:
+        athlete = self.athletes[id]
         if athlete:
-            athlete.first_name = api_athlete.first_name
-            athlete.last_name = api_athlete.last_name
-            db_athlete = self.session.query(AthleteDB).filter_by(id=api_athlete.id).first()
+            athlete.first_name = first_name
+            athlete.last_name = last_name
+            db_athlete = self.session.query(AthleteDB).filter_by(id=id).first()
             db_athlete.first_name = athlete.first_name
             db_athlete.last_name = athlete.last_name
             self.save_to_db()
-            return AthleteResponse(id=api_athlete.id, first_name=api_athlete.first_name, last_name=api_athlete.last_name)
+            return AthleteResponse(id=id, first_name=first_name, last_name=last_name)
         else:
             return None
     
@@ -55,31 +60,42 @@ class Organization:
             return 0
         else:
             return -1
+    
+    def get_all_athletes(self) -> list[AthleteResponse]:
+        return [AthleteResponse(id=a.id, first_name=a.first_name, last_name=a.last_name) for a in self.athletes.values()]
+
+    def create_run(self, id: str, athlete_id: str, video_path: str,
+                   start_10m_coords_x: int, start_10m_coords_y: int,
+                   end_10m_coords_x: int, end_10m_coords_y: int) -> None:
         
-    def create_run(self, api_run: RunCreate) -> None:
-        run = Run(id=api_run.id, athlete_id=api_run.athlete_id, video_path=api_run.video_path, 
-                  start_10m_coords=(api_run.start_10m_coords_x, api_run.start_10_coords_y),
-                  end_10m_coords=(api_run.end_10m_coords_x, api_run.end_10_coords_y))
+        if id in self.runs:
+            return None
+        
+        run = Run(id=id, athlete_id=athlete_id, video_path=video_path, 
+                  start_10m_coords=(start_10m_coords_x, start_10m_coords_y),
+                  end_10m_coords=(end_10m_coords_x, end_10m_coords_y))
         self.runs[id] = run
         self.session.add(run.to_db())
         self.session.add(run.video.to_db())
         self.save_to_db()
-        return RunResponse(id=run.id, athlete_id=run.athlete_id, video_path=run.video.path)
+        return RunResponse(id=run.id, athlete_id=run.athlete_id, video_path=run.video.path,
+                           pose_data=json.dumps(run.pose_data), velocity_data=json.dumps(run.velocity_data))
     
     def get_run(self, id: str):
         run = self.runs.get(id)
         if run:
-            return RunResponse(id=run.id, athlete_id=run.athlete_id, video_path=run.video.path)
+            return RunResponse(id=run.id, athlete_id=run.athlete_id, video_path=run.video.path,
+                               pose_data=json.dumps(run.pose_data.tolist()), velocity_data=json.dumps(run.velocity_data.tolist()))
         else:
             return None
 
-    def edit_run(self, api_run: RunUpdate) -> None:
-        if api_run.id in self.runs:
-            self.runs[api_run.id].athlete_id = api_run.athlete_id
+    def edit_run(self, id: str, athlete_id: str) -> None:
+        if id in self.runs:
+            self.runs[id].athlete_id = athlete_id
             db_run = self.session.query(RunDB).filter_by(id=id).first()
-            db_run.athlete_id = api_run.athlete_id
+            db_run.athlete_id = athlete_id
             self.save_to_db()
-            return RunResponse(id=api_run.id, athlete_id=api_run.athlete_id, video_path=self.runs[api_run.id].video.path)
+            return RunResponse(id=id, athlete_id=athlete_id, video_path=self.runs[id].video.path)
         else:
             return None
     
@@ -92,6 +108,9 @@ class Organization:
             return 0
         else:
             return -1
+    
+    def get_all_runs(self) -> list[RunResponse]:
+        return [RunResponse(id=r.id, athlete_id=r.athlete_id, video_path=r.video.path) for r in self.runs.values()]
 
     def load_from_db(self) -> None:
         self.athletes = {} # {id: Athlete}
@@ -102,6 +121,7 @@ class Organization:
             #Load Users
             db_users = self.session.query(UserDB).all()
             self.users = {u.id: User.from_db(u) for u in db_users}
+            
             # Load athletes
             db_athletes = self.session.query(AthleteDB).all()
             self.athletes = {a.id: Athlete.from_db(a) for a in db_athletes}
