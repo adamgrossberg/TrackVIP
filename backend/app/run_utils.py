@@ -1,6 +1,5 @@
 import numpy as np
-import pandas as pd
-from Video import Video
+from app.local_objects.Video import Video
 import os
 from moviepy import VideoFileClip
 import cv2
@@ -16,7 +15,6 @@ def get_video_from_path(path: str, run_id:str) -> Video:
         return Video(id, path, fps, resolution)
 
 def convert_to_mp4(path: str) -> str:
-
     if os.path.exists(path):
         # Extract the directory and file name without extension
         directory, filename = os.path.split(path)

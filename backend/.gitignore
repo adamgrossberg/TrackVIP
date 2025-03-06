@@ -1,6 +1,3 @@
 .venv/
 input/
 output_videos/
-save_data/
-__pycache__/
-database/

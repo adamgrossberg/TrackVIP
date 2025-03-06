@@ -1,6 +1,6 @@
-from run_utils import *
+from app.run_utils import *
 import json
-from database import RunDB
+from app.database import RunDB
 
 class Run:
 
@@ -14,15 +14,11 @@ class Run:
         else:
             # Create Video object that contains path to mp4, fps, resolution fields
             self.video = get_video_from_path(video_path, self.id)
-            print(f'Created Video object: {str(self.video)}')
-            input('Press enter to continue...')
 
         if pose_data is not None:
             self.pose_data = pose_data
         else:
             self.pose_data = get_pose_data_from_video(self.video, export_video=True, run_id=self.id)
-            print('Pose detection applied successfully.')
-            input('Press enter to continue...')
 
         if start_10m_coords:
             self.start_10m_coords = start_10m_coords
