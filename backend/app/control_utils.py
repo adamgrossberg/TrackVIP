@@ -1,7 +1,6 @@
-from validation import *
-from Organization import Organization
-from User import User
-import os
+from app.validation import *
+from app.Organization import Organization
+from app.local_objects.User import User
 
 VALID_COMMANDS = {
     'list': 'list valid commands',
@@ -66,7 +65,7 @@ def process_command(organization: Organization, command: str) -> str:
             if not valid:
                 return message
             else:
-                organization.add_athlete(id, first_name, last_name)
+                organization.create_athlete(id, first_name, last_name)
                 return f'Athlete {first_name} {last_name} ({id}) added auccessfully.'
         
         case 'add run':
@@ -79,7 +78,7 @@ def process_command(organization: Organization, command: str) -> str:
             if not valid:
                 return message
             else:
-                organization.add_run(id, athlete_id, video_path)
+                organization.create_run(id, athlete_id, video_path)
                 return f'Run {id} added successfully.'
         
         case 'edit athlete':

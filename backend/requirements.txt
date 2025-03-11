@@ -6,4 +6,6 @@ mediapipe
 tqdm
 pandas
 sqlalchemy
-json
+fastapi
+uvicorn
+pydantic

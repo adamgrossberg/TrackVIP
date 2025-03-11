@@ -1,10 +1,13 @@
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 from sqlalchemy import create_engine, Column, String, Integer, Float, ForeignKey
+import os
 
 Base = declarative_base()
 
 def start_database_session():
-    engine = create_engine("sqlite:///database/gttrack.db")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, 'database', 'gttrack.db')
+    engine = create_engine(f"sqlite:///{db_path}")
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
