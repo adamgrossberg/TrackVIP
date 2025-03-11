@@ -1,4 +1,4 @@
-from Organization import Organization
+from app.Organization import Organization
 import os
 
 def add_athlete_is_valid(org: Organization, athlete_id: str) -> tuple[bool, str]:
