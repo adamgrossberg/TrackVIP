@@ -1,4 +1,4 @@
-# Environment Setup
+# Backend Setup
 
 ## Virtual Environment
 
@@ -29,3 +29,15 @@ Follow these steps to download SQLite: https://www.youtube.com/watch?v=-bDwNR_C0
 To start the FastAPI server, run the following from the backend folder:
 
 **$ uvicorn app.main:app --reload**
+
+# Frontend Setup
+Navigate to frontend/track-vip
+
+## React App Initialization
+
+**$ npm install**
+Install all necessary npm modules
+
+**$ npm run dev**
+Run the application locally
+
