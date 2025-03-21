@@ -38,6 +38,7 @@ Navigate to frontend/track-vip
 **$ npm install**
 Install all necessary npm modules
 
+### change line 18 to http:{your localhost ip}
+
 **$ npm run dev**
 Run the application locally
-
