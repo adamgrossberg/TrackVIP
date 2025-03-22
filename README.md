@@ -38,7 +38,10 @@ Navigate to frontend/track-vip
 **$ npm install**
 Install all necessary npm modules
 
-### change line 18 to http:{your localhost ip}
+### control f http:// and change the address to whatever url your fastapi backend is running on.
+
+### change line 10 in main.py to whatever server your react app runs on
+
 
 **$ npm run dev**
 Run the application locally
