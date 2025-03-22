@@ -2,11 +2,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import './App.css'
 import Login from '../pages/Login'
 import HomePage from '../pages/Home'
+import Navbar from "../components/Header"
 function App() {
 
 
   return (
     <Router>
+        <Navbar />
         <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<HomePage />} />
