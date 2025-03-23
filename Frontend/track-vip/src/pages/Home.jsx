@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ApiCall from "../components/apiCalls";
 import CreateAthlete from "../components/createAthlete";
+import RunsTable from "../components/runsTable";
 function HomePage() {
 
     return (
@@ -10,6 +11,7 @@ function HomePage() {
             <Heading mb={6} textAlign="center" color="white">Home</Heading>
             <ApiCall />
             <CreateAthlete />
+            <RunsTable />
         </Box>
     );
 }
