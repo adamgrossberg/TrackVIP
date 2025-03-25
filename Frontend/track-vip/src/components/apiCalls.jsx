@@ -24,11 +24,11 @@ function ApiCall() {
     };
     
     return (
-        <Box p={4} maxWidth="600px" mx="auto" borderWidth="1px" borderRadius="md" justifyContent="center" alignItems="center">
-        <Heading mb={4}>API Call Test</Heading>
+        <Box p={4} maxWidth="400px" mx="auto" borderWidth="1px" borderRadius="md" justifyContent="center" alignItems="center" bg="#25283D">
+        <Heading mb={4} justifySelf={"center"}>API Call Test</Heading>
         
         <form onSubmit={getRequest}>
-            <VStack spacing={4} align="flex-start">
+            <VStack spacing={4} align="flex-start" justifyContent="center" alignItems="center">
             <FormControl id="getCall">
                 <FormLabel>Test FastApi Get Methods</FormLabel>
                 <Input
