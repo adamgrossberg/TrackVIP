@@ -1,7 +1,9 @@
 import { Box, Button, Input, Heading, VStack} from "@chakra-ui/react";
 import ApiCall from "../components/apiCalls";
 import CreateAthlete from "../components/createAthlete";
+import RunsTable from "../components/runsTable";
 import CreateRun from "../components/videoUpload";
+
 function HomePage() {
 
     return (
