@@ -79,7 +79,7 @@ class Organization:
         self.session.add(run.video.to_db())
         self.save_to_db()
         return RunResponse(id=run.id, athlete_id=run.athlete_id, video_path=run.video.path,
-                           pose_data=json.dumps(run.pose_data), velocity_data=json.dumps(run.velocity_data))
+                           pose_data=json.dumps(run.pose_data.tolist()), velocity_data=json.dumps(run.velocity_data.tolist()))
     
     def get_run(self, id: str):
         run = self.runs.get(id)

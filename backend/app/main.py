@@ -1,8 +1,17 @@
 from app.control_utils import *
 from fastapi import FastAPI
 from app.routes import athletes, runs
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 app.include_router(athletes.router, prefix="/athletes", tags=["Athletes"])
 app.include_router(runs.router, prefix="/runs", tags=["Runs"])
