@@ -1,7 +1,10 @@
-import React from "react";
+import {React} from "react";
+import { useNavigate } from "react-router-dom";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import Logo from "./Logo";
 const NavBar = () => {
+  const navigate = useNavigate();
+
   return (
     <Flex
       position="sticky"
@@ -13,14 +16,12 @@ const NavBar = () => {
       justify="space-between"
       align="center"
       >
-      <Logo />
+      <Button bg="none" color="#f6f2f2" onClick={() => navigate('/runs')}><Logo /></Button>
       <Flex>
-        <Button colorScheme="teal" variant="outline" mr={4} color='white'
-        _hover={{ bg: 'snow', color: '#25283D' }}>
+        <Button variant="subtle" bg={"none"} color="#f6f2f2" onClick={() => navigate('/runs')}>
           Home
         </Button>
-        <Button colorScheme="teal" variant="outline" mr={4} color='white'
-        _hover={{ bg: 'snow', color: '#25283D' }}>
+        <Button variant="subtle" bg={"none"} color="#f6f2f2" onClick={() => navigate('/runs')}>
           About
         </Button>
       </Flex>

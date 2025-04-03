@@ -4,6 +4,7 @@ import Login from '../pages/Login'
 import HomePage from '../pages/Home'
 import Runs from '../pages/Runs'
 import Navbar from "../components/Header"
+import RunDetails from "../pages/RunDetails"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/runs" element={<Runs />} />
+            <Route path="/runs/:id" element={<RunDetails />} />
         </Routes>
     </Router>
   )
