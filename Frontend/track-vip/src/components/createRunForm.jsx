@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Input, Heading, VStack, HStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Input,
+  VStack,
+  HStack,
+  ProgressCircle,
+  Alert,
+  CloseButton,
+} from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import InputVideo from "./InputVideo";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateRunForm = () => {
   const [runData, setRunData] = useState({
@@ -19,6 +29,10 @@ const CreateRunForm = () => {
   const [athletes, setAthletes] = useState([]);
   const [runs, setRuns] = useState([]);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,45 +51,49 @@ const CreateRunForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setRunData({ ...runData, [name]: value });
-    // console.log(runData);
   };
 
   const handleStartCoordsChange = (x, y) => {
-    setRunData({ 
-        ...runData, 
-        start_10m_coords_x: Math.round(x), 
-        start_10m_coords_y: Math.round(y) 
-      });
-    // console.log(runData)
+    setRunData({
+      ...runData,
+      start_10m_coords_x: Math.round(x),
+      start_10m_coords_y: Math.round(y),
+    });
   };
 
   const handleEndCoordsChange = (x, y) => {
-    setRunData({ 
-        ...runData, 
-        end_10m_coords_x: Math.round(x), 
-        end_10m_coords_y: Math.round(y) 
-      });
-    // console.log(runData)
+    setRunData({
+      ...runData,
+      end_10m_coords_x: Math.round(x),
+      end_10m_coords_y: Math.round(y),
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess(false);
 
     if (runs.some((run) => run.id === runData.id)) {
       setError("Run ID must be unique.");
       return;
     }
 
+    setIsSubmitting(true);
     const videoPathWithPrefix = `./input/${runData.video_path}`;
 
     try {
       const newRun = { ...runData, video_path: videoPathWithPrefix };
       const response = await axios.post("http://127.0.0.1:8000/runs/", newRun);
-      console.log("Success:", response.data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+      setSuccess(true);
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      setError("Failed to create run. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
 
   return (
     <Box
@@ -92,10 +110,34 @@ const CreateRunForm = () => {
       justifyContent="center"
     >
       <form onSubmit={handleSubmit}>
-        <VStack>
-          <HStack spacing={4} align="start" wrap="wrap">
-            {error && <Text color="red.500">{error}</Text>}
+        <VStack spacing={4} width="100%">
+          {error && (
+            <Alert status="error" borderRadius="md">
+              <AlertIcon />
+              <AlertTitle mr={2}>Error:</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+              <CloseButton position="absolute" right="8px" top="8px" onClick={() => setError("")} />
+            </Alert>
+          )}
 
+          {success && (
+            <Alert.Root status="success" borderRadius="md" flexDirection="column" alignItems="start">
+              <HStack justify="space-between" width="100%">
+                <Box>
+                <Alert.Indicator />
+                  <Alert.Title>Run Created!</Alert.Title>
+                  <Alert.Description>
+                    You can now view this run’s page.
+                  </Alert.Description>
+                </Box>
+                <Button size="sm" colorScheme="teal" onClick={() => navigate(`/runs/${runData.id}`)}>
+                  View Run
+                </Button>
+              </HStack>
+            </Alert.Root>
+          )}
+
+          <HStack spacing={4} align="start" wrap="wrap">
             <FormControl>
               <FormLabel>Run ID</FormLabel>
               <Input
@@ -152,7 +194,7 @@ const CreateRunForm = () => {
             />
           </FormControl>
 
-          <Button type="submit" width="full">
+          <Button type="submit" width="full" loading={isSubmitting} disabled={isSubmitting} loadingText="This may take a minute...">
             Submit
           </Button>
         </VStack>
