@@ -1,16 +1,20 @@
 import { useState, useRef } from "react";
 import { Box, Input, Text } from "@chakra-ui/react";
+import DraggableStart from "./start10m"; 
+import DraggableEnd from "./end10m"; 
 
-const FileUpload = ({ onFileSelect }) => {
+const InputVideo = ({ onFileSelect, onStartCoordsChange, onEndCoordsChange }) => {
   const [videoPreview, setVideoPreview] = useState(null);
-  const videoRef = useRef(null);
 
+  const videoRef = useRef(null);
+  const videoContainerRef = useRef(null);
+
+  // Handle file change and video preview
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       onFileSelect(file.name);
 
-      // Extract first frame of the video
       const videoURL = URL.createObjectURL(file);
       const video = document.createElement("video");
       video.src = videoURL;
@@ -30,8 +34,18 @@ const FileUpload = ({ onFileSelect }) => {
     }
   };
 
+  // Update the start and end coordinates when the draggable component moves
+  const handleStartCoordsChange = (x, y) => {
+    onStartCoordsChange(x, y); // Pass coordinates to parent
+  };
+
+  const handleEndCoordsChange = (x, y) => {
+    onEndCoordsChange(x, y); // Pass coordinates to parent
+  };
+
   return (
     <Box
+      ref={videoContainerRef}
       width="100%"
       height="400px"
       maxWidth="800px"
@@ -51,6 +65,7 @@ const FileUpload = ({ onFileSelect }) => {
       ) : (
         <Text color="white">Select Video</Text>
       )}
+
       <Input
         type="file"
         accept="video/*"
@@ -58,8 +73,15 @@ const FileUpload = ({ onFileSelect }) => {
         onChange={handleFileChange}
         style={{ display: "none" }}
       />
+
+      {videoPreview && (
+        <>
+          <DraggableStart onDragEnd={handleStartCoordsChange} />
+          <DraggableEnd onDragEnd={handleEndCoordsChange} />
+        </>
+      )}
     </Box>
   );
 };
 
-export default FileUpload;
+export default InputVideo;
