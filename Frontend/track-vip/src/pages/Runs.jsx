@@ -6,7 +6,7 @@ import CreateAthlete from "../components/createAthlete";
 import RunsTable from "../components/runsTable";
 
 function Runs() {
-
+    const navigate = useNavigate();
     return (
         <Box>
             <Grid
@@ -20,7 +20,7 @@ function Runs() {
                     <Heading mb={6} color="#25283D">Runs</Heading>
                 </GridItem>
                 <GridItem textAlign={"right"}>
-                    <Button bg="#25283D" color="#f6f2f2" marginTop={"auto"}>New Run</Button>
+                    <Button bg="#25283D" color="#f6f2f2" marginTop={"auto"} onClick={() => navigate('/createrun')}>New Run</Button>
                 </GridItem>
                 <GridItem colSpan={5}>
                     <RunsTable />
