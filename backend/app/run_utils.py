@@ -6,6 +6,7 @@ import cv2
 import mediapipe as mp
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+import subprocess
 
 def get_video_from_path(path: str, run_id:str) -> Video:
         id = run_id + '_video'
@@ -61,9 +62,9 @@ def get_pose_data_from_video(video: Video, export_video: bool, run_id: str) -> n
 
     # Set output configuration
     if export_video:
-        os.makedirs('../frontend/track-vip/public/videos', exist_ok=True)
-        output_path = f'../frontend/track-vip/public/videos/{run_id}_pose.mp4'
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 'mp4v' for .mp4 files
+        os.makedirs('./output_videos', exist_ok=True)
+        output_path = f'./output_videos/{run_id}_pose_raw.mp4'
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # h.264 video encoding 
         out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
     # Initialize array to store pose estimation data
@@ -119,6 +120,26 @@ def get_pose_data_from_video(video: Video, export_video: bool, run_id: str) -> n
     cap.release()
     if export_video:
         out.release()
+        final_path = f'../frontend/track-vip/public/videos/{run_id}_pose.mp4'
+        ffmpeg_cmd = [
+            'ffmpeg',
+            '-y',
+            '-i', output_path,
+            '-vcodec', 'libx264',
+            '-crf', '23',
+            '-g', '1',            # GOP size: force every frame to be an I-frame
+            '-keyint_min', '1',   # minimum GOP size
+            '-x264opts', 'keyint=1:min-keyint=1:no-scenecut',
+            final_path
+        ]
+
+        try:
+            subprocess.run(ffmpeg_cmd, check=True)
+            print(f"Exported H.264 video to {final_path}")
+            os.remove(output_path)
+        except subprocess.CalledProcessError as e:
+            print("ffmpeg re-encoding failed:", e)
+
     cv2.destroyAllWindows()
 
     pose_data = np.array(pose_data) # Numpy array of size (num_frames, num_landmarks, num_dimensions). num_dimensions is 2 (x, y)
