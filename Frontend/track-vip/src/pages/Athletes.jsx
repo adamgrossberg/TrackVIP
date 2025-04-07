@@ -1,12 +1,8 @@
 import { Box, Button, Heading, HStack, Grid, GridItem } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import ApiCall from "../components/apiCalls";
-import CreateAthlete from "../components/createAthlete";
-import RunsTable from "../components/runsTable";
 import AthletesTable from "../components/athletesTable";
 
-function Runs() {
+function Athletes() {
     const navigate = useNavigate();
     return (
         <Box>
@@ -18,17 +14,14 @@ function Runs() {
                 padding={30}
             >
                 <GridItem colSpan="4">
-                    <Heading mb={6} color="#25283D">Runs</Heading>
-                </GridItem>
-                <GridItem textAlign={"right"}>
-                    <Button bg="#25283D" color="#f6f2f2" marginTop={"auto"} onClick={() => navigate('/createrun')}>New Run</Button>
+                    <Heading mb={6} color="#25283D">Athletes</Heading>
                 </GridItem>
                 <GridItem colSpan={5}>
-                    <RunsTable />
+                    <AthletesTable />
                 </GridItem>
             </Grid>
         </Box>
     );
 }
 
-export default Runs
+export default Athletes
