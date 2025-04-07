@@ -3,6 +3,11 @@
 ## Initial Setup
 ### Only complete these steps the first time you open the project
 
+### FFMpeg
+Download the FFmpeg Zip from https://www.gyan.dev/ffmpeg/builds/
+Extract the files from the zip folder and navigate to ffmpeg\bin
+Add the bin folder to your path variable
+
 ### Virtual environment
 After you clone the repository to your machine, create your virtual environment:
 ```shell

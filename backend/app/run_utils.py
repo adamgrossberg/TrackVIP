@@ -120,7 +120,7 @@ def get_pose_data_from_video(video: Video, export_video: bool, run_id: str) -> n
     cap.release()
     if export_video:
         out.release()
-        final_path = f'./output_videos/{run_id}_pose.mp4'
+        final_path = f'../frontend/track-vip/public/videos/{run_id}_pose.mp4'
         ffmpeg_cmd = [
             'ffmpeg',
             '-y',

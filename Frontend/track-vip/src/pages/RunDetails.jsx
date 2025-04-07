@@ -14,6 +14,7 @@ import FrameView from "../components/FrameView";
 function RunDetails() {
     const { id } = useParams()
     const [runDetails, setRunDetails] = useState({})
+    const [videoPath, setVideoPath] = useState(null)
     const [velocityData, setVelocityData] = useState([])
     const [frameNumber, setFrameNumber] = useState(1)
     const [currentVelocity, setCurrentVelocity] = useState(0)
@@ -26,6 +27,9 @@ function RunDetails() {
             .get("http://localhost:8000/runs/" + id)
             .then((response) => {
                 setRunDetails(response.data)
+                const newPath = `/videos/${response.data.id}_pose.mp4`;
+                console.log(newPath)
+                setVideoPath(newPath)
                 const v = JSON.parse(response.data.velocity_data)
                 setVelocityData(v.map((velocity, index) => ({
                     frame: index,
@@ -69,7 +73,7 @@ function RunDetails() {
             <Wrap justify={"center"}>
                     <VStack minWidth={500} width="45%">
                         <p>Frame: {frameNumber} | Velocity: {currentVelocity.toFixed(5)} m/s</p>
-                        <FrameView videoPath={"/videos/run1_pose_browser_iframe.mp4"} frameNumber={frameNumber} fps={60} />
+                        <FrameView videoPath={videoPath} frameNumber={frameNumber} fps={60} />
 
                         <HStack width="100%">
                             <IconButton onClick={() => setFrameNumber(frameNumber - 1)} variant="subtle" size="sm"><FaBackward color="#25283D"/></IconButton>
