@@ -6,6 +6,7 @@ import Runs from '../pages/Runs'
 import CreateRunPage from "../pages/CreateRun"
 import Navbar from "../components/Header"
 import RunDetails from "../pages/RunDetails"
+import Athletes from "../pages/Athletes"
 
 function App() {
 
@@ -17,8 +18,10 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/runs" element={<Runs />} />
+            <Route path="/athletes" element={<Athletes />} />
             <Route path="/createrun" element={<CreateRunPage />} />
             <Route path="/runs/:id" element={<RunDetails />} />
+
         </Routes>
     </Router>
   )

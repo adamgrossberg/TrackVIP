@@ -18,10 +18,13 @@ const NavBar = () => {
       >
       <Button bg="none" color="#f6f2f2" onClick={() => navigate('/runs')}><Logo /></Button>
       <Flex>
-        <Button variant="subtle" bg={"none"} color="#f6f2f2" onClick={() => navigate('/runs')}>
-          Home
+        <Button variant="subtle" bg={"none"}  _hover={{ bg: "#43486b" }} color="#f6f2f2" onClick={() => navigate('/runs')}>
+          Runs
         </Button>
-        <Button variant="subtle" bg={"none"} color="#f6f2f2" onClick={() => navigate('/runs')}>
+        <Button variant="subtle" bg={"none"} _hover={{ bg: "#43486b" }} color="#f6f2f2" onClick={() => navigate('/athletes')}>
+          Athletes
+        </Button>
+        <Button variant="subtle" bg={"none"} _hover={{ bg: "#43486b" }} color="#f6f2f2" onClick={() => navigate('/runs')}>
           About
         </Button>
       </Flex>
