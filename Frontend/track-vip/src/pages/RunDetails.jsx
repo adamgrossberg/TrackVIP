@@ -113,7 +113,7 @@ function RunDetails() {
                                                     </NumberInput.Root>
                                                     <Heading size="lg">Velocity: {currentVelocity.toFixed(5)} m/s</Heading>
                                                 </HStack>
-                                                <FrameView videoPath={"/videos/run1_pose_browser_iframe.mp4"} frameNumber={frameNumber} fps={60} />
+                                                <FrameView videoPath={videoPath} frameNumber={frameNumber} fps={60} />
                                             </VStack>
                                         </Dialog.Body>
                                         <Dialog.CloseTrigger asChild>
